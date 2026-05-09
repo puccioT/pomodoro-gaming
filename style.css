@@ -1,0 +1,330 @@
+body { /* Retirer le html, juste ici */
+    margin: 0;
+    padding: 0;
+    color: white;
+    font-family: 'VT323', monospace;
+    overflow: hidden;
+    background-color: #000000;
+}
+
+#bg-video {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    object-fit: cover;
+    z-index: -1;
+    transition: filter 0.8s ease;
+    image-rendering: pixelated;
+}
+
+.screen {
+    height: 100vh; width: 100vw;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+#timer-screen {
+    background: transparent; /* Sécurité pour enlever tout voile gris non désiré sur l'écran timer */
+}
+
+.hidden { display: none !important; }
+
+/* --- LE MENU --- */
+.titre-principal {
+    font-family: 'Press Start 2P', cursive; font-size: 3.5rem; letter-spacing: 5px;
+    margin-top: -15vh; margin-bottom: 80px; color: #ffffff; text-shadow: 4px 4px 0px rgba(0,0,0,0.8);
+}
+
+.carousel-container { display: flex; justify-content: center; align-items: center; gap: 40px; }
+
+.arrow-btn {
+    background: none; border: none; font-size: 3rem; color: rgba(255, 255, 255, 0.5);
+    cursor: pointer; transition: all 0.2s; text-shadow: 2px 2px 5px rgba(0,0,0,0.8);
+}
+.arrow-btn:hover { transform: scale(1.2); color: white; }
+
+.theme-card {
+    width: 320px; height: 180px; background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px; display: flex; flex-direction: column; justify-content: center; align-items: center;
+    cursor: pointer; box-shadow: 0 15px 25px rgba(0,0,0,0.5); transition: all 0.3s ease;
+}
+.theme-card:hover { transform: translateY(-5px) scale(1.02); border: 1px solid rgba(255, 255, 255, 0.4); box-shadow: 0 20px 35px rgba(0,0,0,0.7); }
+
+.theme-card h2 { font-family: 'Press Start 2P', cursive; font-size: 1.5rem; margin: 0 0 10px 0; text-shadow: 2px 2px 0px rgba(0,0,0,0.8); }
+.theme-card p { font-size: 1.4rem; color: #aaaaaa; margin: 0 0 20px 0; }
+.play-hint { font-family: 'Press Start 2P', cursive; font-size: 0.8rem; color: #4CAF50; animation: blink 1.5s infinite; }
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+/* --- LE CHRONO --- */
+.timer-layout { display: block; position: relative; }
+
+.top-left-panel { position: absolute; top: 40px; left: 40px; display: flex; flex-direction: column; align-items: flex-start; }
+.timer-row { display: flex; align-items: center; gap: 20px; margin-bottom: 15px; }
+#temps { font-family: 'Press Start 2P', cursive; font-size: 4rem; margin: 0; text-shadow: 4px 4px 0px rgba(0,0,0,0.8); }
+
+.progress-container {
+    width: 200px; height: 25px; border: 4px solid white; background-color: rgba(0, 0, 0, 0.5);
+    padding: 3px; box-shadow: 4px 4px 0px rgba(0,0,0,0.8);
+}
+#progress-bar { height: 100%; width: 100%; background-color: #ffd700; transition: width 1s linear, background-color 0.5s ease; }
+
+#timer-theme-name { font-family: 'Press Start 2P', cursive; font-size: 1.2rem; margin: 0 0 10px 0; color: #4CAF50; text-shadow: 2px 2px 0px rgba(0,0,0,0.8); }
+#status { font-size: 1.8rem; margin: 0; color: #dddddd; text-shadow: 2px 2px 5px black; }
+
+.top-right-panel { position: absolute; top: 40px; right: 40px; display: flex; gap: 15px; align-items: center; }
+
+button {
+    font-family: 'Press Start 2P', cursive; font-size: 0.8rem; padding: 15px 25px; cursor: pointer;
+    border-radius: 5px; transition: all 0.3s;
+}
+
+button#btn-quitter { border: 2px solid white; background-color: rgba(0, 0, 0, 0.5); color: white; }
+button#btn-quitter:hover { background-color: white; color: black; }
+
+button#btn-skip-prep { border: 2px solid #ffd700; background-color: rgba(0, 0, 0, 0.5); color: #ffd700; }
+button#btn-skip-prep:hover { background-color: #ffd700; color: black; }
+
+/* Le nouveau bouton Pause */
+button#btn-pause { border: 2px solid #3498db; background-color: rgba(0, 0, 0, 0.5); color: #3498db; }
+button#btn-pause:hover { background-color: #3498db; color: white; }
+
+/* --- MESSAGE CENTRAL DE PRÉPARATION --- */
+#prep-message {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.75); backdrop-filter: blur(10px); border: 2px solid #ffd700;
+    border-radius: 15px; padding: 40px 50px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.8); z-index: 10;
+}
+#prep-message h3 { font-family: 'Press Start 2P', cursive; color: #ffd700; font-size: 1.5rem; margin-top: 0; margin-bottom: 20px; text-shadow: 2px 2px 0px rgba(0,0,0,0.8); }
+#prep-message p { font-size: 1.6rem; color: #dddddd; margin-bottom: 30px; font-style: italic; }
+#prep-message ul { list-style-type: none; padding: 0; font-size: 1.5rem; text-align: left; display: inline-block; margin: 0; }
+#prep-message ul li { margin-bottom: 15px; color: white; text-shadow: 2px 2px 4px black; }
+
+/* Le bouton Plein écran */
+button#btn-fullscreen { border: 2px solid #9b59b6; background-color: rgba(0, 0, 0, 0.5); color: #9b59b6; }
+button#btn-fullscreen:hover { background-color: #9b59b6; color: white; }
+
+/* --- CONTRÔLE DU VOLUME --- */
+.volume-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px; /* Légèrement réduit pour être plus compact à côté des boutons */
+    /* margin-top: 20px; SUPPRIMÉ : c'est ça qui causait la barre moche ! */
+}
+
+/* Le texte "VOL" stylisé pixel */
+.retro-vol {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 12px;
+    color: #ffffff;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 0px #000000;
+}
+
+/* On retire le style par défaut pour TOUS les navigateurs */
+#volume-slider {
+    -webkit-appearance: none;
+    appearance: none; 
+    width: 100px; /* Un peu plus court pour bien s'insérer en haut à droite */
+    background: transparent;
+    cursor: pointer;
+}
+
+/* 1. LA PISTE (La barre de fond) */
+#volume-slider::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 8px; /* Un peu affiné */
+    background: #000000;
+    border: 2px solid #ffffff;
+}
+
+#volume-slider::-moz-range-track {
+    width: 100%;
+    height: 8px;
+    background: #000000;
+    border: 2px solid #ffffff;
+}
+
+/* 2. LE POUCE (Le curseur rouge) */
+#volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 16px;
+    width: 10px;
+    background: #e74c3c;
+    margin-top: -6px; 
+    border: 2px solid #ffffff;
+}
+
+#volume-slider::-moz-range-thumb {
+    height: 16px;
+    width: 10px;
+    background: #e74c3c;
+    border: 2px solid #ffffff;
+    border-radius: 0; 
+}
+/* =========================================================
+   RESPONSIVE DESIGN (Pour les PC portables et petits écrans)
+   ========================================================= */
+   @media screen and (max-width: 1400px), screen and (max-height: 800px) {
+    
+    /* --- RÉDUCTION DU MENU PRINCIPAL --- */
+    .titre-principal {
+        font-size: 2.5rem; /* Plus petit */
+        margin-bottom: 40px; /* Moins d'espace en dessous */
+    }
+    
+    .theme-card {
+        width: 260px; /* Carte plus petite */
+        height: 150px;
+    }
+    
+    .theme-card h2 { font-size: 1.2rem; }
+    .theme-card p { font-size: 1rem; }
+    .arrow-btn { font-size: 2rem; }
+
+    /* --- RÉDUCTION DE L'ÉCRAN TIMER --- */
+    /* On rapproche les panneaux des bords de l'écran */
+    .top-left-panel { top: 20px; left: 20px; }
+    .top-right-panel { top: 20px; right: 20px; gap: 10px; }
+    
+    /* On rétrécit le texte et la barre de progression */
+    #temps { font-size: 3rem; }
+    .progress-container { width: 150px; height: 20px; }
+    #timer-theme-name { font-size: 1rem; }
+    #status { font-size: 1.2rem; }
+
+    /* --- RÉDUCTION DES BOUTONS ET DU VOLUME --- */
+    button { 
+        padding: 10px 15px; 
+        font-size: 0.7rem; 
+    }
+    
+    .volume-container { gap: 5px; }
+    .retro-vol { font-size: 10px; }
+    #volume-slider { width: 80px; }
+    
+    /* --- RÉDUCTION DU MESSAGE DE PRÉPARATION --- */
+    #prep-message { 
+        padding: 25px 35px; 
+    }
+    #prep-message h3 { font-size: 1.2rem; margin-bottom: 15px; }
+    #prep-message p { font-size: 1.2rem; margin-bottom: 20px; }
+    #prep-message ul { font-size: 1rem; }
+    #prep-message ul li { margin-bottom: 10px; }
+}
+/* =========================================================
+   MODE ÉCRAN ÉTROIT (Moins de 1050px de large)
+   Anti-collision : On centre en haut et on met les boutons en bas !
+   ========================================================= */
+   @media screen and (max-width: 1050px) {
+    
+    /* 1. Le chronomètre passe pile au centre, en haut */
+    .top-left-panel {
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%); /* Technique pour centrer parfaitement */
+        align-items: center; /* Centre le texte */
+        width: 100vw;
+    }
+    
+    /* On empile le chrono et la barre pour gagner de la place en largeur */
+    .timer-row {
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 5px;
+    }
+
+    #timer-theme-name, #status {
+        text-align: center;
+    }
+
+    /* 2. Les boutons fuient la collision et descendent TOUT EN BAS ! */
+    .top-right-panel {
+        top: auto; /* On désactive l'ancrage en haut */
+        bottom: 20px; /* On ancre en bas */
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%);
+        flex-wrap: wrap; /* Si c'est trop petit, les boutons passent à la ligne */
+        justify-content: center;
+        width: 95vw;
+        gap: 10px;
+    }
+
+    /* 3. On réduit un peu le Sas de décompression pour ne rien cacher */
+    #prep-message {
+        width: 85vw;
+        max-width: 400px;
+        padding: 20px;
+    }
+    #prep-message h3 { font-size: 1.2rem; }
+    #prep-message p, #prep-message ul { font-size: 1rem; }
+}
+/* =========================================================
+   LE BIG BOSS : MODE MOBILE (Smartphones < 600px)
+   ========================================================= */
+   @media screen and (max-width: 600px) {
+    
+    /* --- MENU PRINCIPAL --- */
+    .titre-principal {
+        font-size: 1.8rem; /* On diminue drastiquement le gros titre */
+        margin-bottom: 30px;
+        letter-spacing: 2px;
+    }
+
+    /* On resserre le carrousel */
+    .carousel-container { gap: 15px; }
+    .arrow-btn { font-size: 1.5rem; }
+
+    .theme-card {
+        width: 200px;
+        height: 130px;
+    }
+    .theme-card h2 { font-size: 1rem; }
+    .theme-card p { font-size: 0.8rem; margin-bottom: 10px; }
+
+    /* --- ÉCRAN TIMER (En haut) --- */
+    .top-left-panel { top: 15px; }
+    
+    #temps { font-size: 2.5rem; } /* Chrono plus discret */
+    .progress-container { 
+        width: 120px; 
+        height: 15px; 
+        border-width: 2px; 
+    }
+    #timer-theme-name { font-size: 0.8rem; }
+    #status { font-size: 1rem; }
+
+    /* --- BOUTONS ET VOLUME (En bas) --- */
+    .top-right-panel {
+        bottom: 15px;
+        gap: 5px; /* On colle un peu plus les boutons */
+    }
+
+    /* On rend les boutons plus petits et tactiles */
+    button {
+        padding: 8px 10px;
+        font-size: 0.55rem;
+        border-width: 1px;
+    }
+
+    /* Miniature de la barre de volume */
+    .volume-container { margin-bottom: 5px; }
+    #volume-slider { width: 60px; }
+    
+    /* On affine le curseur rouge pour qu'il soit proportionnel */
+    #volume-slider::-webkit-slider-thumb { height: 12px; width: 8px; margin-top: -3px; }
+    #volume-slider::-moz-range-thumb { height: 12px; width: 8px; }
+
+    /* --- MESSAGE PRÉPARATION --- */
+    #prep-message {
+        padding: 15px 20px;
+        width: 85vw; /* Prend presque toute la largeur de l'écran */
+    }
+    #prep-message h3 { font-size: 1rem; margin-bottom: 10px; }
+    #prep-message p { font-size: 0.8rem; margin-bottom: 15px; }
+    #prep-message ul { font-size: 0.75rem; }
+    #prep-message ul li { margin-bottom: 8px; }
+}

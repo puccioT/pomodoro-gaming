@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Pomodoro Gaming - Retro Focus Timer</title>
+        
+        <meta name="description" content="Level up your study sessions with pixel art and legendary game soundtracks.">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="TON_LIEN_NETLIFY"> <meta property="og:title" content="Pomodoro Gaming - Retro Focus Timer">
+        <meta property="og:description" content="Focus with Zelda, Mario, Minecraft, and Elden Ring. The ultimate timer for gamers.">
+        <meta property="og:image" content="assets/preview-image.png"> <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+        
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⏳</text></svg>">
+        
+        <link rel="stylesheet" href="style.css">
+    </head>
+<body>
+
+    <video id="bg-video" autoplay loop muted playsinline>
+        <source id="video-source" src="" type="video/mp4">
+    </video>
+
+    <div id="menu-screen" class="screen">
+        <h1 class="titre-principal">POMODORO</h1>
+        
+        <div class="carousel-container">
+            <button id="btn-prev" class="arrow-btn">❮</button>
+            
+            <div class="theme-card" id="current-theme-card">
+                <h2 id="theme-title">ZELDA</h2>
+                <p id="theme-desc">Hyrulian Serenity</p>
+                <div class="play-hint">▶ START</div>
+            </div>
+            
+            <button id="btn-next" class="arrow-btn">❯</button>
+        </div>
+    </div>
+
+    <div id="timer-screen" class="screen timer-layout hidden">
+        
+        <div class="top-left-panel">
+            <div class="timer-row">
+                <div id="temps">25:00</div>
+                <div class="progress-container">
+                    <div id="progress-bar"></div>
+                </div>
+            </div>
+            <h2 id="timer-theme-name">Current theme...</h2>
+            <div id="status">Focus phase</div>
+        </div>
+        
+        <div id="prep-message" class="hidden">
+            <h3>DECOMPRESSION CHAMBER</h3>
+            <p>The journey begins shortly...</p>
+            <ul>
+                <li>💧 Refill your water</li>
+                <li>🎧 Put on your headphones</li>
+                <li>📝 Get your notes ready</li>
+                <li>🧘 Take a deep breath</li>
+            </ul>
+        </div>
+        
+        <div class="top-right-panel boutons">
+            
+            <div class="volume-container">
+                <span class="retro-vol">VOL</span>
+                <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.4">
+            </div>
+
+            <button id="btn-skip-prep" class="hidden">&#9658;&#9658; Skip Prep</button>
+            <button id="btn-pause">⏸ Pause</button>
+            <button id="btn-fullscreen">⛶ Fullscreen</button>
+            <button id="btn-quitter">Quit</button>
+        </div> 
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
