@@ -328,3 +328,33 @@ button#btn-fullscreen:hover { background-color: #9b59b6; color: white; }
     #prep-message ul { font-size: 0.75rem; }
     #prep-message ul li { margin-bottom: 8px; }
 }
+/* Style du bouton Ko-fi */
+.kofi-link {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.8rem;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 4px;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.2s;
+    border: 2px solid #29abe0; /* Le bleu officiel Ko-fi */
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #29abe0;
+    text-align: center;
+}
+
+.kofi-link:hover {
+    background-color: #29abe0;
+    color: white;
+    transform: scale(1.05);
+}
+
+/* Version Mobile */
+@media screen and (max-width: 600px) {
+    .kofi-link {
+        padding: 6px 8px;
+        font-size: 0.5rem;
+        border-width: 1px;
+    }
+}

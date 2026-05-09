@@ -436,3 +436,4 @@ volumeSlider.addEventListener('input', (e) => {
         audioActuel.volume = volumeGlobal;
     }
 });
+document.getElementById('btn-kofi').addEventListener('mouseenter', jouerSonHover);
