@@ -414,15 +414,27 @@ btnQuitter.addEventListener('click', () => {
     bgVideo.play(); 
 });
 
+// --- GESTION DU PLEIN ÉCRAN (Version Corrigée & Synchronisée) ---
+
+// 1. L'action de cliquer sur le bouton
 btnFullscreen.addEventListener('click', () => {
     if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen().catch(err => {
             console.log(`Error attempting to enable fullscreen mode: ${err.message}`);
         });
-        btnFullscreen.textContent = "✖ Exit Fullscreen"; 
     } else {
         document.exitFullscreen();
-        btnFullscreen.textContent = "⛶ Fullscreen"; 
+    }
+});
+
+// 2. L'écouteur magique qui synchronise l'affichage (même avec la touche Échap)
+document.addEventListener('fullscreenchange', () => {
+    if (document.fullscreenElement) {
+        // On est en plein écran
+        btnFullscreen.textContent = "✖ Exit Fullscreen";
+    } else {
+        // On n'est plus en plein écran
+        btnFullscreen.textContent = "⛶ Fullscreen";
     }
 });
 
