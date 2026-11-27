@@ -2,7 +2,7 @@
 
 **A retro focus timer that drops you into the worlds of Zelda, Mario, Elden Ring, Pokémon and Minecraft.**
 
-![Pomodoro Gaming preview](assets/preview-image.png)
+![Pomodoro Gaming demo](assets/demo.gif)
 
 🔗 Live: [gaming-pomodoro.netlify.app](https://gaming-pomodoro.netlify.app/)
 
@@ -17,7 +17,8 @@ I do long deep-work sessions, and generic Pomodoro timers never made me want to 
 - **Music that behaves like a game**: shuffled playlists with no repeats, a hand-picked opening track per theme, smooth crossfades between tracks and between focus/break phases
 - **Seamless theme switching**: crossfading video backgrounds with instant poster frames, so no black screens
 - **Reliable timing**: the countdown is based on the real clock, so it stays accurate even when the tab is in the background
-- Pause/resume, volume control, fullscreen, responsive down to mobile
+- **Built for real focus sessions**: live countdown in the browser tab, keyboard shortcuts (← → to browse, Enter to start, Space to pause), volume and last theme remembered between visits
+- Fullscreen mode, responsive down to mobile
 
 ## Design choices
 
