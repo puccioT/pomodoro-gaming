@@ -7,15 +7,25 @@ body { /* Retirer le html, juste ici */
     background-color: #000000;
 }
 
-#bg-video {
+#bg-layer {
     position: fixed;
     top: 0; left: 0;
     width: 100vw; height: 100vh;
-    object-fit: cover;
     z-index: -1;
+    overflow: hidden;
     transition: filter 0.8s ease;
+}
+
+.bg-video {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.6s ease;
     image-rendering: pixelated;
 }
+.bg-video.active { opacity: 1; }
 
 .screen {
     height: 100vh; width: 100vw;
