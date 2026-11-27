@@ -33,7 +33,7 @@
         <div class="carousel-container">
             <button id="btn-prev" class="arrow-btn">❮</button>
             
-            <div class="theme-card" id="current-theme-card">
+            <div class="theme-card" id="current-theme-card" tabindex="0" role="button" aria-label="Start this theme">
                 <h2 id="theme-title">ZELDA</h2>
                 <p id="theme-desc">Hyrulian Serenity</p>
                 <div class="play-hint">▶ START</div>
@@ -41,6 +41,8 @@
             
             <button id="btn-next" class="arrow-btn">❯</button>
         </div>
+
+        <p class="keyboard-hint">← → to browse · ENTER to start · SPACE to pause</p>
     </div>
 
     <div id="timer-screen" class="screen timer-layout hidden">

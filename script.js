@@ -328,6 +328,7 @@ function mettreAJourCarte() {
     themeTitle.textContent = theme.nom;
     themeDesc.textContent = theme.desc;
     afficherVideo(theme);
+    sauvegarderReglage('pomodoro-theme', theme.id);
 }
 
 btnNext.addEventListener('click', () => { indexActuel = (indexActuel + 1) % themes.length; mettreAJourCarte(); });
@@ -342,6 +343,21 @@ function mettreAJourAffichageTemps() {
 
     const pourcentage = (tempsRestant / tempsMaxPhase) * 100;
     progressBar.style.width = pourcentage + "%";
+
+    // Le chrono s'affiche aussi dans l'onglet : pratique quand on bosse sur une autre page
+    const nomsPhases = { preparation: 'Prep', travail: 'Focus', pause: 'Break' };
+    if (nomsPhases[phaseActuelle]) {
+        document.title = `${minutes}:${secondes} · ${nomsPhases[phaseActuelle]} — Pomodoro Gaming`;
+    }
+}
+
+// --- SAUVEGARDE DES RÉGLAGES (volume + dernier thème) ---
+// try/catch : le stockage peut être bloqué (navigation privée, cookies désactivés)
+function sauvegarderReglage(cle, valeur) {
+    try { localStorage.setItem(cle, valeur); } catch (e) {}
+}
+function lireReglage(cle) {
+    try { return localStorage.getItem(cle); } catch (e) { return null; }
 }
 
 // Lance le compte à rebours d'une nouvelle phase.
@@ -378,6 +394,7 @@ function terminerSession() {
     clearInterval(timerActif);
     phaseActuelle = 'terminee';
     tempsRestant = 0;
+    document.title = "✔ Session complete! — Pomodoro Gaming";
     affichageStatus.textContent = "SESSION COMPLETE!";
     affichageTemps.textContent = "00:00";
     luminositeVideo(1);
@@ -483,6 +500,7 @@ btnQuitter.addEventListener('click', () => {
     clearInterval(timerActif);
     phaseActuelle = 'menu';   // Empêche les pistes en cours de relancer une musique de travail
     enPause = false;
+    document.title = TITRE_PAR_DEFAUT;
 
     eteindreAudio(audioActuel, 1000);
     audioActuel = null;       // Libéré tout de suite : une nouvelle session peut démarrer sans conflit
@@ -523,10 +541,44 @@ document.addEventListener('fullscreenchange', () => {
     }
 });
 
+// --- DÉMARRAGE : on restaure les réglages de la dernière visite ---
+const TITRE_PAR_DEFAUT = document.title;
+
+const themeSauvegarde = themes.findIndex(t => t.id === lireReglage('pomodoro-theme'));
+if (themeSauvegarde !== -1) indexActuel = themeSauvegarde;
+
+const volumeSauvegarde = parseFloat(lireReglage('pomodoro-volume'));
+if (!isNaN(volumeSauvegarde) && volumeSauvegarde >= 0 && volumeSauvegarde <= 1) {
+    volumeGlobal = volumeSauvegarde;
+    volumeSlider.value = volumeSauvegarde;
+}
+
 mettreAJourCarte();
+
+// --- RACCOURCIS CLAVIER ---
+// Menu : ← / → pour changer de thème, Entrée ou Espace pour lancer
+// Timer : Espace pour pause / reprise
+document.addEventListener('keydown', (e) => {
+    if (e.repeat || e.ctrlKey || e.metaKey || e.altKey) return;
+    const dansLeMenu = !menuScreen.classList.contains('hidden');
+
+    if (dansLeMenu) {
+        if (e.key === 'ArrowRight') { e.preventDefault(); btnNext.click(); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); btnPrev.click(); }
+        else if (e.key === 'Enter' || e.key === ' ') {
+            // Si un bouton a le focus (flèches), on laisse le navigateur gérer
+            if (document.activeElement && document.activeElement.tagName === 'BUTTON') return;
+            e.preventDefault(); themeCard.click();
+        }
+    } else if (e.key === ' ') {
+        e.preventDefault();   // Sinon Espace "clique" aussi sur le dernier bouton utilisé
+        if (!btnPause.classList.contains('hidden')) btnPause.click();
+    }
+});
 
 volumeSlider.addEventListener('input', (e) => {
     volumeGlobal = parseFloat(e.target.value);
+    sauvegarderReglage('pomodoro-volume', volumeGlobal);
 
     // Si une musique est en cours et n'est pas en train de s'éteindre (fondu sortant)
     if (audioActuel && !audioActuel.enFonduSortant && !enPause) {

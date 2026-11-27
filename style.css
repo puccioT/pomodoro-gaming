@@ -65,6 +65,14 @@ body { /* Retirer le html, juste ici */
 .theme-card p { font-size: 1.4rem; color: #aaaaaa; margin: 0 0 20px 0; }
 .play-hint { font-family: 'Press Start 2P', cursive; font-size: 0.8rem; color: #4CAF50; animation: blink 1.5s infinite; }
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+.theme-card:focus-visible { outline: 2px solid #4CAF50; outline-offset: 4px; }
+
+/* Aide clavier discrète sous le carrousel (cachée sur écrans tactiles) */
+.keyboard-hint {
+    margin-top: 40px; font-size: 1.2rem; letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.45); text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+}
+@media (hover: none) { .keyboard-hint { display: none; } }
 
 /* --- LE CHRONO --- */
 .timer-layout { display: block; position: relative; }
